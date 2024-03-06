@@ -15,7 +15,7 @@ jobs:
     steps:
       - id: deploy
         name: Deploy
-        uses: bitovi/github-actions-docker-to-azure-vm@v1
+        uses: bitovi/github-actions-docker-to-azure-vm@v1.0.1
         with:
           AZURE_ARM_CLIENT_ID: ${{ secrets.AZURE_ARM_CLIENT_ID }}
           AZURE_ARM_CLIENT_SECRET: ${{ secrets.AZURE_ARM_CLIENT_SECRET }}
@@ -25,3 +25,4 @@ jobs:
           tf_state_bucket: "my-state-bucket"
           dot_env: ${{ secrets.DOT_ENV }}
           app_port: 3000
+          additional_tags: '{"key1": "value1","key2": "value2"}'
