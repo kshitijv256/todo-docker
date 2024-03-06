@@ -1,0 +1,27 @@
+name: Advanced deploy
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  EC2-Deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name }}
+      url: ${{ steps.deploy.outputs.vm_url }}
+    steps:
+      - id: deploy
+        name: Deploy
+        uses: bitovi/github-actions-docker-to-azure-vm@v1
+        with:
+          AZURE_ARM_CLIENT_ID: ${{ secrets.AZURE_ARM_CLIENT_ID }}
+          AZURE_ARM_CLIENT_SECRET: ${{ secrets.AZURE_ARM_CLIENT_SECRET }}
+          AZURE_ARM_TENANT_ID: ${{ secrets.AZURE_ARM_TENANT_ID }}
+          AZURE_ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_ARM_SUBSCRIPTION_ID }}
+          Azure_default_region: eastus
+          tf_state_bucket: "my-state-bucket"
+          dot_env: ${{ secrets.DOT_ENV }}
+          app_port: 3000
