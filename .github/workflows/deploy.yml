@@ -1,28 +1,16 @@
-name: Advanced deploy
+name: Remote Deployment
 on:
   push:
-    branches: [main]
-
-permissions:
-  contents: read
-
+    branches: ["main"]
 jobs:
-  EC2-Deploy:
+  deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ github.ref_name }}
-      url: ${{ steps.deploy.outputs.vm_url }}
     steps:
-      - id: deploy
-        name: Deploy
-        uses: bitovi/github-actions-docker-to-azure-vm@v1.0.1
+      - uses: actions/checkout@v2
+
+      - uses: masterjanic/docker-compose-ssh-deployment@master
+        name: Docker-Compose Remote Deployment
         with:
-          AZURE_ARM_CLIENT_ID: ${{ secrets.AZURE_ARM_CLIENT_ID }}
-          AZURE_ARM_CLIENT_SECRET: ${{ secrets.AZURE_ARM_CLIENT_SECRET }}
-          AZURE_ARM_TENANT_ID: ${{ secrets.AZURE_ARM_TENANT_ID }}
-          AZURE_ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_ARM_SUBSCRIPTION_ID }}
-          Azure_default_region: eastus
-          tf_state_bucket: "my-state-bucket"
-          dot_env: ${{ secrets.DOT_ENV }}
-          app_port: 3000
-          additional_tags: '{"key1": "value1","key2": "value2"}'
+          ssh_host: your-remote-server.com
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh_user: ${{ secrets.SSH_USER }}
