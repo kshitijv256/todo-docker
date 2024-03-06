@@ -12,7 +12,7 @@ module.exports = {
     username: "postgres",
     password: "1234",
     database: "todo_db_test",
-    host: "127.0.0.1",
+    host: "postgres",
     dialect: "postgres",
   },
   production: {
